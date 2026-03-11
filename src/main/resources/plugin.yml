@@ -1,0 +1,27 @@
+name: LimitedGrace
+version: '1.0'
+main: top.timeblog.limitedGrace.LimitedGrace
+api-version: '1.21'
+authors: [ Time ]
+description: Provides a limited death protection system where players keep their inventory for the first configurable number of deaths.
+website: https://www.time-blog.top
+commands:
+  limitedgrace:
+    aliases:
+      - lg
+    description: LimitedGrace main command
+    usage: /limitedgrace <reload|get|getDeaths|set>
+    permissions:
+      limitedgrace.admin:
+        description: limitedGrace admin
+        default: op
+      limitedgrace.reload:
+        description: limitedGrace reload permission
+        default: op
+      limitedgrace.set:
+        description: limitedGrace set permission
+        default: op
+      limitedgrace.get:
+        default: true
+      limitedgrace.get.it:
+        default: op

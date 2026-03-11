@@ -1,0 +1,16 @@
+# Number of protections
+protections-number: 10
+# Does the game warn players when they have only a few protection opportunities left?
+protect-warn:
+  - 3
+  - 1
+
+# Message
+protect-message: "§a具有 §f{1} §a次死亡保护"
+protect-warn-message: "§a你只剩 §e{0} 次§a死亡保护了"
+death-message: "§c已死亡：§f{0} §a次"
+not-permission-message: "§c你没有使用该命令的权限！"
+reload-message: "§a配置已重新加载"
+set-player-death-message: "§a已将玩家§e %s §a的死亡次数修改为 %d"
+player-404-message: "§c玩家不存在或不在线"
+value-err-message: "§c数值不合法"
