@@ -21,7 +21,12 @@ commands:
       limitedgrace.set:
         description: limitedGrace set permission
         default: op
+      limitedgrace.setdeath:
+        description: limitedGrace setDeath permission
+        default: op
       limitedgrace.get:
         default: true
       limitedgrace.get.it:
+        default: op
+      limitedgrace.add:
         default: op
