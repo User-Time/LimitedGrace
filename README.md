@@ -92,9 +92,3 @@ After the protection runs out, players will die normally.
 1. Download the plugin `.jar`
 2. Place it into the `plugins` folder
 3. Start or reload the server
-
----
-
-## Configuration
-
-Example configuration:
