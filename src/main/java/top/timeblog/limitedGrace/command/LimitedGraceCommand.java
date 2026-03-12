@@ -53,7 +53,8 @@ public class LimitedGraceCommand implements CommandExecutor, TabCompleter {
             sender.sendMessage("§e/lg help            §7- 查看插件帮助");
             sender.sendMessage("§e/lg get [玩家]       §7- 查看 自己/其他玩家 的剩余保护次数");
             sender.sendMessage("§e/lg getDeaths [玩家] §7- 查看 自己/其他玩家 死亡次数");
-            sender.sendMessage("§e/lg set [玩家] <次数> §7- 修改 自己/其他玩家 死亡次数");
+            sender.sendMessage("§e/lg set [玩家] <次数> §7- 修改 自己/其他玩家 额外保护次数");
+            sender.sendMessage("§e/lg setDeaths [玩家] <次数> §7- 修改 自己/其他玩家 死亡次数");
             sender.sendMessage("§e/lg add [玩家] <次数> §7- 添加 自己/其他玩家 的额外死亡保护");
             sender.sendMessage("§e/lg reload           §7- 重载插件配置");
             return true;

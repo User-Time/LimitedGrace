@@ -6,48 +6,65 @@
 ![Release](https://img.shields.io/github/v/release/User-Time/LimitedGrace)
 ![Downloads](https://img.shields.io/github/downloads/User-Time/LimitedGrace/total)
 
-A lightweight Minecraft plugin that provides **limited death protection**.
+A lightweight Minecraft plugin that provides **limited death protection** for your players! ✨
 
-Players keep their inventory for the first configurable number of deaths.
-
-Perfect for survival servers that want to reduce early frustration while maintaining game balance.
+Players keep their inventory and experience for a configurable number of deaths, making it perfect for survival servers that want to reduce early-game frustration while maintaining long-term balance. 🎮
 
 ---
 
-## Features
+## ✨ Features
 
-- Configurable number of protected deaths
-- Players keep **inventory and experience** during protected deaths
-- Automatic **remaining protection warnings**
-- Admin commands to **view or modify player death counts**
-- Lightweight and simple configuration
+* **Dual Protection Layers**: Supports both "Newbie Protection" (default) and "Extra Protection" (manually added).
+* **Total Inventory Retention**: Items are **not dropped** during protected deaths.
+* **XP Preservation**: Experience **is not lost** when a player is under protection.
+* **Smart Warnings**: Automatic notifications when protection charges are running low.
+* **Admin Control**: Fully manage death counts and protection levels via commands.
 
 ---
 
-## Commands
+## 💻 Commands & Permissions
 
-| Command | Description | Permission |
-|-------|-------------|------------|
-| `/lg get` | Check your remaining protection | `limitedgrace.get` |
-| `/lg get <player>` | Check another player's remaining protection | `limitedgrace.get.it` |
-| `/lg getDeaths [player]` | View death counts | `limitedgrace.get` |
-| `/lg set <player> <count>` | Set a player's death count | `limitedgrace.set` |
-| `/lg reload` | Reload the configuration | `limitedgrace.reload` |
+| Command | Description | Permission | Default |
+| :--- | :--- | :--- | :--- |
+| `/lg get` | Check your remaining protection | `limitedgrace.get` | Everyone |
+| `/lg get <player>` | Check another player's protection | `limitedgrace.get.it` | OP |
+| `/lg getDeaths [player]` | View current death counts | `limitedgrace.get` | Everyone |
+| `/lg add <count>` | Add extra protection charges | `limitedgrace.add` | OP |
+| `/lg add <player> <count>` | Add extra protection charges | `limitedgrace.add.it` | OP |
+| `/lg set <player> <count>` | Set total protection charges | `limitedgrace.set` | OP |
+| `/lg setDeath <player> <count>` | Modify a player's death count | `limitedgrace.setdeath` | OP |
+| `/lg reload` | Reload the plugin configuration | `limitedgrace.reload` | OP |
 
 Alias:
   - /lg
 
 ---
+## ⚙️ Configuration
 
-## Permissions
+The `config.yml` allows you to customize protection limits and localized messages.
 
-| Permission | Description | Default |
-|-----------|------------|--------|
-| `limitedgrace.admin` | Full admin permission | OP |
-| `limitedgrace.reload` | Reload config | OP |
-| `limitedgrace.set` | Modify player death counts | OP |
-| `limitedgrace.get` | View own protection | Everyone |
-| `limitedgrace.get.it` | View other players' protection | OP |
+```yaml
+# Number of protections
+death-protections-number: 10
+default-added-protections-number: 0
+
+# Does the game warn players when they have only a few protection opportunities left?
+protect-warn:
+  - 3
+  - 1
+
+# Message
+protect-message: "§a玩家 §f{0} §a具有 §e{1}次 §a死亡保护§f,\n§a其中包含 §e{2}次 §a新人保护§f,§a以及 §e{3}次 §a的额外死亡保护§f."
+protect-warn-message: "§a你只剩 §e{0}次 §a死亡保护了§f, \n§a其中新人保护仅剩 §e{1}次§f, §a额外死亡保护仅剩 §e{2}次§f."
+death-message: "§a玩家 §f{0} §a已死亡：§e{1}次"
+not-permission-message: "§c你没有使用该命令的权限！"
+reload-message: "§a配置已重新加载!"
+set-player-death-message: "§a已将玩家§f %s §a的死亡次数修改为:§e %d"
+set-player-added-permission-message: "§a已将玩家§f %s §a的额外死亡保护次数修改为:§e %d次"
+player-404-message: "§c玩家不存在或不在线"
+value-err-message: "§c数值不合法"
+set-added-protect-message: "§a已将玩家 §f{0} §a的额外死亡保护设为：§e{1}次"
+```
 
 ---
 
@@ -81,22 +98,3 @@ After the protection runs out, players will die normally.
 ## Configuration
 
 Example configuration:
-
-```yaml
-# Number of protections
-protections-number: 10
-# Does the game warn players when they have only a few protection opportunities left?
-protect-warn:
-  - 3
-  - 1
-
-# Message
-protect-message: "§a具有 §f{1} §a次死亡保护"
-protect-warn-message: "§a你只剩 §e{0} 次§a死亡保护了"
-death-message: "§c已死亡：§f{0} §a次"
-not-permission-message: "§c你没有使用该命令的权限！"
-reload-message: "§a配置已重新加载"
-set-player-death-message: "§a已将玩家§e %s §a的死亡次数修改为 %d"
-player-404-message: "§c玩家不存在或不在线"
-value-err-message: "§c数值不合法"
-```

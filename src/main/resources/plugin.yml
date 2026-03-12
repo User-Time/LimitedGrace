@@ -1,5 +1,5 @@
 name: LimitedGrace
-version: '1.0'
+version: '1.1.1'
 main: top.timeblog.limitedGrace.LimitedGrace
 api-version: '1.21'
 authors: [ Time ]
@@ -10,7 +10,7 @@ commands:
     aliases:
       - lg
     description: LimitedGrace main command
-    usage: /limitedgrace <reload|get|getDeaths|set>
+    usage: /limitedgrace <reload|get|getDeaths|set|setDeath|add>
     permissions:
       limitedgrace.admin:
         description: limitedGrace admin
