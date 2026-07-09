@@ -14,13 +14,14 @@ import java.text.MessageFormat;
 import java.util.*;
 
 
+import static org.bukkit.Bukkit.getPlayer;
 import static top.timeblog.limitedGrace.LimitedGrace.*;
 import static top.timeblog.limitedGrace.manager.DeathManager.*;
 
 public class LimitedGraceCommand implements CommandExecutor, TabCompleter {
 
     private String getDeathMessage(String name, Boolean protect) {
-        Player player = Bukkit.getPlayer(name);
+        Player player = getPlayer(name);
         if (player == null) {
             return CONFIG_P404_MSG;
         }
@@ -51,6 +52,7 @@ public class LimitedGraceCommand implements CommandExecutor, TabCompleter {
         if (args.length == 0 || args[0].equalsIgnoreCase("help")) {
             sender.sendMessage("§6§lLimitedGrace 帮助");
             sender.sendMessage("§e/lg help            §7- 查看插件帮助");
+            sender.sendMessage("§e/lg switch [玩家]          §7- 为自己/他人切换保护");
             sender.sendMessage("§e/lg get [玩家]       §7- 查看 自己/其他玩家 的剩余保护次数");
             sender.sendMessage("§e/lg getDeaths [玩家] §7- 查看 自己/其他玩家 死亡次数");
             sender.sendMessage("§e/lg set [玩家] <次数> §7- 修改 自己/其他玩家 额外保护次数");
@@ -94,7 +96,6 @@ public class LimitedGraceCommand implements CommandExecutor, TabCompleter {
                     sender.sendMessage(CONFIG_NP_MSG);
                     return true;
                 }
-
                 if (args.length == 1) {
                     if (!(sender instanceof Player)) {
                         return true;
@@ -148,7 +149,7 @@ public class LimitedGraceCommand implements CommandExecutor, TabCompleter {
                         return true;
                     }
 
-                    sender.sendMessage(addAddedProtectionsNumber(Bukkit.getPlayer(sender.getName()), count));
+                    sender.sendMessage(addAddedProtectionsNumber(getPlayer(sender.getName()), count));
                 } else if (args.length == 3) {
                     // it
                     int count;
@@ -158,7 +159,7 @@ public class LimitedGraceCommand implements CommandExecutor, TabCompleter {
                         sender.sendMessage("%s is not a valid integer type.".formatted(args[2]));
                         return true;
                     }
-                    sender.sendMessage(addAddedProtectionsNumber(Bukkit.getPlayer(args[1]), count));
+                    sender.sendMessage(addAddedProtectionsNumber(getPlayer(args[1]), count));
                 }
             }
             else if (args[0].equalsIgnoreCase("set")) {
@@ -189,6 +190,36 @@ public class LimitedGraceCommand implements CommandExecutor, TabCompleter {
                 }
 
             }
+            else if (args[0].equalsIgnoreCase("switch")){
+                if (!sender.hasPermission("limitedgrace.switch")){
+                    sender.sendMessage(CONFIG_NP_MSG);
+                    return true;
+                }
+                if (args.length == 1) {
+                    if (!(sender instanceof Player)) {
+                        return true;
+                    }
+                    setSwitch((Player)sender, !getSwitch((Player)sender));
+                    sender.sendMessage(MessageFormat.format("已将您的保护状态切换为{0}", getSwitch((Player) sender)));
+                } else if (args.length == 2) {
+                    if (!sender.hasPermission("limitedgrace.switch.it")){
+                        sender.sendMessage(CONFIG_NP_MSG);
+                        return true;
+                    }
+                    Player player = Bukkit.getPlayer(args[1]);
+                    setSwitch(player, !getSwitch((Player)sender));
+                    sender.sendMessage(MessageFormat.format("已将 {0} 的保护状态切换为{1}",player.getName() , getSwitch((Player) sender)));
+                }
+            }else if (args[0].equalsIgnoreCase("switchAll")){
+                if (!sender.hasPermission("limitedgrace.switch.all")){
+                    sender.sendMessage(CONFIG_NP_MSG);
+                    return true;
+                }
+                if (args.length == 1) {
+                    setAllSwitch(!getAllSwitch());
+                    sender.sendMessage(MessageFormat.format("已将全局保护状态切换为{0}", getAllSwitch()));
+                }
+            }
         }
         return true;
     }
@@ -198,9 +229,9 @@ public class LimitedGraceCommand implements CommandExecutor, TabCompleter {
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         if (args.length == 1) {
             if (sender.hasPermission("limitedgrace.admin")) {
-                return Arrays.asList("reload", "get", "getDeaths", "setDeath","set","add");
+                return Arrays.asList("reload", "get", "getDeaths", "switch", "switchAll", "setDeath","set","add");
             }else {
-                return Arrays.asList("get", "getDeaths");
+                return Arrays.asList("get", "getDeaths", "switch");
             }
 
         }
@@ -210,7 +241,9 @@ public class LimitedGraceCommand implements CommandExecutor, TabCompleter {
                     || args[0].equalsIgnoreCase("getDeaths")
                     || args[0].equalsIgnoreCase("setDeath")
                     || args[0].equalsIgnoreCase("set")
-                    || args[0].equalsIgnoreCase("add")) {
+                    || args[0].equalsIgnoreCase("add")
+                    || args[0].equalsIgnoreCase("switch")
+            ) {
                 List<String> players = new ArrayList<>();
                 for (Player p : Bukkit.getOnlinePlayers()) {
                     players.add(p.getName());

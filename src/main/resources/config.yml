@@ -1,3 +1,7 @@
+# Global grace state.
+# Use `/lg switchAll` to switch.
+enabled: true
+
 # Number of protections
 death-protections-number: 10
 default-added-protections-number: 0

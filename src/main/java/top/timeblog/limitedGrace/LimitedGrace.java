@@ -16,6 +16,7 @@ public final class LimitedGrace extends JavaPlugin {
     public static ComponentLogger Log;
     private static LimitedGrace instance;
     public static NamespacedKey DEATH_COUNT_KEY;
+    public static NamespacedKey DEATH_BOOL_KEY;
     public static NamespacedKey ADDED_PROTECTION_COUNT_KEY;
     public static int CONFIG_DP_COUNT;
     public static int CONFIG_AP_COUNT;
@@ -30,6 +31,7 @@ public final class LimitedGrace extends JavaPlugin {
     public static String CONFIG_P404_MSG;
     public static String CONFIG_VE_MSG;
     public static String CONFIG_SAP_MSG;
+    public static boolean ENABLED;
 
 
     @Override
@@ -39,6 +41,7 @@ public final class LimitedGrace extends JavaPlugin {
         Log = this.getComponentLogger();
         loadConfigValues();
         DEATH_COUNT_KEY = new NamespacedKey(this, "death_count");
+        DEATH_BOOL_KEY = new NamespacedKey(this, "lg_bool");
         ADDED_PROTECTION_COUNT_KEY = new NamespacedKey(this, "added_protections_count");
         getServer().getPluginManager().registerEvents(
                 new PlayerDeathListener(),
@@ -46,10 +49,12 @@ public final class LimitedGrace extends JavaPlugin {
         );
         getCommand("limitedGrace").setExecutor(new LimitedGraceCommand());
         Log.info("Enabled!");
+
     }
     public void loadConfigValues() {
         try {
             log.debug("Config Loading!");
+            ENABLED = getConfig().getBoolean("some-feature-enabled", true);
             CONFIG_DP_COUNT = getConfig().getInt("death-protections-number",10);
             CONFIG_AP_COUNT = getConfig().getInt("default-added-protections-number",0);
             CONFIG_PW_COUNT = getConfig().getIntegerList("protect-warn");

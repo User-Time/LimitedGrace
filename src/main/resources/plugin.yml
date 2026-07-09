@@ -1,5 +1,5 @@
 name: LimitedGrace
-version: '1.1.1'
+version: '1.2.0'
 main: top.timeblog.limitedGrace.LimitedGrace
 api-version: '1.21'
 authors: [ Time ]
@@ -27,6 +27,12 @@ commands:
       limitedgrace.get:
         default: true
       limitedgrace.get.it:
+        default: op
+      limitedgrace.switch:
+        default: true
+      limitedgrace.switch.it:
+        default: op
+      limitedgrace.switch.all:
         default: op
       limitedgrace.add:
         default: op

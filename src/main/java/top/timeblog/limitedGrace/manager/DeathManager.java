@@ -22,8 +22,30 @@ public class DeathManager {
         event.getDrops().clear();
         event.setDroppedExp(0);
     }
+
     /// ================
-    ///   死亡次数 相关
+    ///    掉落保护开关
+    /// ================
+
+    public static Boolean getSwitch(Player player){
+        PersistentDataContainer thePlayer = player.getPersistentDataContainer();
+        return thePlayer.getOrDefault(DEATH_BOOL_KEY, PersistentDataType.BOOLEAN, true);
+    }
+    public static void setSwitch(Player player, boolean value){
+        PersistentDataContainer thePlayer = player.getPersistentDataContainer();
+        thePlayer.set(DEATH_BOOL_KEY, PersistentDataType.BOOLEAN, value);
+    }
+    public static boolean getAllSwitch(){
+        return ENABLED;
+    }
+    public static void  setAllSwitch(boolean value){
+        ENABLED = value;
+        LimitedGrace.getInstance().getConfig().set("some-feature-enabled", value);
+        LimitedGrace.getInstance().saveConfig();
+    }
+
+    /// ================
+    ///     死亡次数
     /// ================
     // 设置
     public static boolean setDeath(Player player, int number) {
@@ -45,7 +67,7 @@ public class DeathManager {
     }
 
     /// ======================
-    ///       额外保护方法
+    ///      额外保护方法
     /// ======================
     // 查询 次数
     public static int getAddedProtections(Player player) {
@@ -76,6 +98,11 @@ public class DeathManager {
     /// 触发 死亡 的事件方法
     /// ==================
     public static void handleDeath(Player player, PlayerDeathEvent event) {
+        if (player.hasPermission("limitedgrace.unlimited")) {
+            DeathItemNotLose(event);
+            return;
+        }
+
         addDeath(player,1);
         int deathsCount = getDeaths(player);
         int left = Math.max(0, CONFIG_DP_COUNT - deathsCount);
@@ -95,8 +122,6 @@ public class DeathManager {
                 player.sendMessage(MessageFormat.format(CONFIG_PW_MSG, left+getAddedProtections(player), left, getAddedProtections(player)));
             }
         }
-
-
     }
 
     /// ==============================
