@@ -2,37 +2,58 @@ name: LimitedGrace
 version: '1.2.0'
 main: top.timeblog.limitedGrace.LimitedGrace
 api-version: '1.21'
-authors: [ Time ]
+authors: [Time]
 description: Provides a limited death protection system where players keep their inventory for the first configurable number of deaths.
 website: https://www.time-blog.top
+
 commands:
   limitedgrace:
     aliases:
       - lg
     description: LimitedGrace main command
     usage: /limitedgrace <reload|get|getDeaths|set|setDeath|add>
-    permissions:
-      limitedgrace.admin:
-        description: limitedGrace admin
-        default: op
-      limitedgrace.reload:
-        description: limitedGrace reload permission
-        default: op
-      limitedgrace.set:
-        description: limitedGrace set permission
-        default: op
-      limitedgrace.setdeath:
-        description: limitedGrace setDeath permission
-        default: op
-      limitedgrace.get:
-        default: true
-      limitedgrace.get.it:
-        default: op
-      limitedgrace.switch:
-        default: true
-      limitedgrace.switch.it:
-        default: op
-      limitedgrace.switch.all:
-        default: op
-      limitedgrace.add:
-        default: op
+
+permissions:
+  limitedgrace.admin:
+    description: LimitedGrace administrator permission
+    default: op
+
+  limitedgrace.reload:
+    description: Reload the LimitedGrace configuration
+    default: op
+
+  limitedgrace.set:
+    description: Set a player's remaining protection count
+    default: op
+
+  limitedgrace.setdeath:
+    description: Set a player's death count
+    default: op
+
+  limitedgrace.get:
+    description: View your own protection information
+    default: true
+
+  limitedgrace.get.it:
+    description: View another player's protection information
+    default: op
+
+  limitedgrace.switch:
+    description: Toggle your own death protection
+    default: true
+
+  limitedgrace.switch.it:
+    description: Toggle another player's death protection
+    default: op
+
+  limitedgrace.switch.all:
+    description: Toggle death protection globally
+    default: op
+
+  limitedgrace.add:
+    description: Add protection counts to a player
+    default: op
+
+  limitedgrace.unlimited:
+    description: Bypass protection count consumption
+    default: op

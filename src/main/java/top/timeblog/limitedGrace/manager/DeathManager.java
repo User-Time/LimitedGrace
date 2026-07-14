@@ -40,7 +40,7 @@ public class DeathManager {
     }
     public static void  setAllSwitch(boolean value){
         ENABLED = value;
-        LimitedGrace.getInstance().getConfig().set("some-feature-enabled", value);
+        LimitedGrace.getInstance().getConfig().set("enabled", value);
         LimitedGrace.getInstance().saveConfig();
     }
 
