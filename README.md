@@ -108,28 +108,30 @@ Version **1.2.0** introduces protection toggles, global protection control, and 
 The `config.yml` file allows protection limits, warning thresholds, and plugin messages to be customized.
 
 ```yaml
-# Number of newbie protection charges
-death-protections-number: 10
+# Global grace state.
+# Use `/lg switchAll` to switch.
+enabled: true
 
-# Default number of extra protection charges
+# Number of protections
+death-protections-number: 10
 default-added-protections-number: 0
 
-# Warn players when their remaining protection reaches these values
+# Does the game warn players when they have only a few protection opportunities left?
 protect-warn:
   - 3
   - 1
 
-# Messages
-protect-message: "§a玩家 §f{0} §a具有 §e{1}次 §a死亡保护§f,\n§a其中包含 §e{2}次 §a新人保护§f,§a以及 §e{3}次 §a的额外死亡保护§f."
-protect-warn-message: "§a你只剩 §e{0}次 §a死亡保护了§f, \n§a其中新人保护仅剩 §e{1}次§f, §a额外死亡保护仅剩 §e{2}次§f."
-death-message: "§a玩家 §f{0} §a已死亡：§e{1}次"
-not-permission-message: "§c你没有使用该命令的权限！"
-reload-message: "§a配置已重新加载!"
-set-player-death-message: "§a已将玩家§f %s §a的死亡次数修改为:§e %d"
-set-player-added-permission-message: "§a已将玩家§f %s §a的额外死亡保护次数修改为:§e %d次"
-player-404-message: "§c玩家不存在或不在线"
-value-err-message: "§c数值不合法"
-set-added-protect-message: "§a已将玩家 §f{0} §a的额外死亡保护设为：§e{1}次"
+# Message
+protect-message: "§aPlayer §f{0} §ahas §e{1} §adeath protection charge(s)§f,\n§aincluding §e{2} §anew player protection charge(s)§f and §e{3} §aextra protection charge(s)§f."
+protect-warn-message: "§aYou only have §e{0} §adeath protection charge(s) remaining§f.\n§aNew player protection remaining: §e{1}§f, §aextra protection remaining: §e{2}§f."
+death-message: "§aPlayer §f{0} §ahas died §e{1} §atime(s)."
+not-permission-message: "§cYou do not have permission to use this command!"
+reload-message: "§aConfiguration reloaded successfully!"
+set-player-death-message: "§aSet player §f%s§a's death count to: §e%d"
+set-player-added-permission-message: "§aSet player §f%s§a's extra death protection count to: §e%d"
+player-404-message: "§cPlayer does not exist or is not online."
+value-err-message: "§cInvalid value."
+set-added-protect-message: "§aSet player §f{0}§a's extra death protection count to: §e{1}"
 ```
 
 After modifying `config.yml`, run:
