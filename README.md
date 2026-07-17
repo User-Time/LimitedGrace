@@ -1,9 +1,9 @@
 # LimitedGrace
 
-![Minecraft](https://img.shields.io/badge/Minecraft-1.21+-brightgreen)
-![Platform](https://img.shields.io/badge/Platform-Paper%20%7C%20Spigot-orange)
-![Java](https://img.shields.io/badge/Java-21+-blue)
-![Version](https://img.shields.io/badge/Version-1.2.0-blueviolet)
+![Minecraft](https://img.shields.io/badge/Minecraft-1.19.4%2B-brightgreen)
+![Platform](https://img.shields.io/badge/Platform-Paper-orange)
+![Java](https://img.shields.io/badge/Java-17%2B-blue)
+![Version](https://img.shields.io/badge/Version-1.3.0-blueviolet)
 ![License](https://img.shields.io/github/license/User-Time/LimitedGrace)
 ![Release](https://img.shields.io/github/v/release/User-Time/LimitedGrace)
 ![Downloads](https://img.shields.io/github/downloads/User-Time/LimitedGrace/total)
@@ -12,7 +12,7 @@ A lightweight Minecraft plugin that provides configurable and flexible **death p
 
 LimitedGrace allows players to keep their inventory and experience for a limited number of deaths. It is suitable for survival servers that want to reduce early-game frustration while preserving the long-term challenge of survival gameplay.
 
-Version **1.2.0** introduces protection toggles, global protection control, and an unlimited permission that allows selected players to use death protection without consuming protection charges.
+Version **1.3.0** adds an asynchronous GitHub Releases update checker, lowers the minimum requirements to Paper 1.19.4 and Java 17, improves configuration management, and fixes configuration and player protection toggle issues.
 
 ---
 
@@ -53,9 +53,12 @@ Version **1.2.0** introduces protection toggles, global protection control, and 
 
 * **Configurable Messages**
   Protection limits, warning thresholds, and plugin messages can be customized through `config.yml`.
-
-* **Java 21 Support**
-  Built for Java 21 and modern Minecraft server versions.
+  
+* **GitHub Release Update Checker**
+  Asynchronously checks GitHub Releases for new versions when the server starts. Update checking can be disabled in `config.yml`.
+  
+* **Java 17 Compatibility**
+  Supports Java 17 and Paper 1.19.4 or newer.
 
 ---
 
@@ -108,30 +111,54 @@ Version **1.2.0** introduces protection toggles, global protection control, and 
 The `config.yml` file allows protection limits, warning thresholds, and plugin messages to be customized.
 
 ```yaml
-# Global grace state.
-# Use `/lg switchAll` to switch.
+# Global death protection state.
+# Use `/lg switchAll` to toggle it.
 enabled: true
 
-# Number of protections
+# Check GitHub Releases for a newer plugin version on startup.
+update-check:
+  enabled: true
+
+# Number of protection charges.
 death-protections-number: 10
 default-added-protections-number: 0
 
-# Does the game warn players when they have only a few protection opportunities left?
+# Remaining protection counts at which the player will receive a warning.
 protect-warn:
   - 3
   - 1
 
-# Message
-protect-message: "§aPlayer §f{0} §ahas §e{1} §adeath protection charge(s)§f,\n§aincluding §e{2} §anew player protection charge(s)§f and §e{3} §aextra protection charge(s)§f."
-protect-warn-message: "§aYou only have §e{0} §adeath protection charge(s) remaining§f.\n§aNew player protection remaining: §e{1}§f, §aextra protection remaining: §e{2}§f."
+# Messages support Minecraft color codes using `§`.
+# Dynamic values use placeholders such as {0}, {1}, %s, and %d.
+help-message:
+  - "§6§lLimitedGrace Help"
+  - "§e/lg help                         §7- Show plugin help"
+  - "§e/lg switch [player]              §7- Toggle protection for yourself or another player"
+  - "§e/lg switchAll                    §7- Toggle protection globally"
+  - "§e/lg get [player]                 §7- View remaining protection charges"
+  - "§e/lg getDeaths [player]           §7- View the death count"
+  - "§e/lg set [player] <count>         §7- Set extra protection charges"
+  - "§e/lg setDeath [player] <count>    §7- Set the death count"
+  - "§e/lg add [player] <count>         §7- Add extra protection charges"
+  - "§e/lg reload                       §7- Reload the plugin configuration"
+
+protect-message: "§aPlayer §f{0} §ahas §e{1} §adeath protection charge(s)§f.\n§aThis includes §e{2} §anewbie protection charge(s) §fand §e{3} §aextra protection charge(s)§f."
+protect-warn-message: "§aYou have only §e{0} §adeath protection charge(s) remaining§f.\n§aNewbie protection remaining: §e{1}§f; §aextra protection remaining: §e{2}§f."
 death-message: "§aPlayer §f{0} §ahas died §e{1} §atime(s)."
 not-permission-message: "§cYou do not have permission to use this command!"
 reload-message: "§aConfiguration reloaded successfully!"
-set-player-death-message: "§aSet player §f%s§a's death count to: §e%d"
-set-player-added-permission-message: "§aSet player §f%s§a's extra death protection count to: §e%d"
+set-player-death-message: "§aSet player §f%s§a's death count to §e%d§a."
+set-player-added-permission-message: "§aSet player §f%s§a's extra protection charges to §e%d§a."
 player-404-message: "§cPlayer does not exist or is not online."
 value-err-message: "§cInvalid value."
-set-added-protect-message: "§aSet player §f{0}§a's extra death protection count to: §e{1}"
+set-added-protect-message: "§aSet player §f{0}§a's extra protection charges to §e{1}§a."
+integer-error-message: "§c{0} is not a valid integer."
+value-unchanged-message: "§cThe value has not changed."
+death-update-error-message: "§cFailed to update the player's death count."
+protection-update-error-message: "§cFailed to update the player's extra protection charges."
+switch-self-message: "Your death protection state has been changed to {0}."
+switch-player-message: "{0}'s death protection state has been changed to {1}."
+switch-all-message: "The global death protection state has been changed to {0}."
 ```
 
 After modifying `config.yml`, run:
@@ -178,9 +205,9 @@ Once all available protection has been exhausted, the player will die normally u
 
 ## 📋 Requirements
 
-* Minecraft **1.21+**
-* Java **21+**
-* Paper or Spigot server
+* Minecraft **1.19.4+**
+* Java **17+**
+* Paper **1.19.4+**
 
 ---
 
@@ -199,5 +226,5 @@ Once all available protection has been exhausted, the player will die normally u
 Current version:
 
 ```text
-1.2.0
+1.3.0
 ```
