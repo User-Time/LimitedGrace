@@ -92,7 +92,7 @@ Version **1.3.0** adds an asynchronous GitHub Releases update checker, lowers th
 | Permission                | Description                                                                   | Default  |
 | :------------------------ | :---------------------------------------------------------------------------- | :------- |
 | `limitedgrace.admin`      | Grants administrative access to LimitedGrace commands                         | OP       |
-| `limitedgrace.unlimited`  | Prevents protection charges from being consumed when death protection is used | OP       |
+| `limitedgrace.unlimited`  | Prevents protection charges from being consumed when death protection is used | False    |
 | `limitedgrace.reload`     | Allows the plugin configuration to be reloaded                                | OP       |
 | `limitedgrace.set`        | Allows extra protection charges to be modified                                | OP       |
 | `limitedgrace.setdeath`   | Allows actual death counts to be modified                                     | OP       |
