@@ -27,6 +27,10 @@ public final class ConfigManager {
         return config.getBoolean("enabled", true);
     }
 
+    public boolean isUpdateCheckEnabled() {
+        return config.getBoolean("update-check.enabled", true);
+    }
+
     public void setEnabled(boolean enabled) {
         config.set("enabled", enabled);
         plugin.saveConfig();

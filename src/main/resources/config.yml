@@ -2,6 +2,10 @@
 # Use `/lg switchAll` to switch.
 enabled: true
 
+# Check GitHub Releases for a newer plugin version on startup.
+update-check:
+  enabled: true
+
 # Number of protections
 death-protections-number: 10
 default-added-protections-number: 0

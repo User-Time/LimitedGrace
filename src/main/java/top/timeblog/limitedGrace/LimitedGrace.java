@@ -5,6 +5,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import top.timeblog.limitedGrace.command.LimitedGraceCommand;
 import top.timeblog.limitedGrace.listener.PlayerDeathListener;
 import top.timeblog.limitedGrace.manager.ConfigManager;
+import top.timeblog.limitedGrace.update.UpdateChecker;
 
 public final class LimitedGrace extends JavaPlugin {
     private static LimitedGrace instance;
@@ -27,6 +28,9 @@ public final class LimitedGrace extends JavaPlugin {
         );
         getCommand("limitedGrace").setExecutor(new LimitedGraceCommand());
         getComponentLogger().info("Enabled!");
+        if (configManager.isUpdateCheckEnabled()) {
+            new UpdateChecker(this).checkForUpdates();
+        }
     }
 
     public static LimitedGrace getInstance() {
