@@ -16,7 +16,8 @@ protect-warn:
 help-message:
   - "§6§lLimitedGrace 帮助"
   - "§e/lg help            §7- 查看插件帮助"
-  - "§e/lg switch [玩家]          §7- 为自己/他人切换保护"
+  - "§e/lg switch [玩家]    §7- 为自己/他人切换保护"
+  - "§e/lg switchAll       §7- 切换插件的保护状态"
   - "§e/lg get [玩家]       §7- 查看 自己/其他玩家 的剩余保护次数"
   - "§e/lg getDeaths [玩家] §7- 查看 自己/其他玩家 死亡次数"
   - "§e/lg set [玩家] <次数> §7- 修改 自己/其他玩家 额外保护次数"

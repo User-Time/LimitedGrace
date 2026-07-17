@@ -1,10 +1,10 @@
 name: LimitedGrace
-version: '1.2.0'
+version: '1.2.2'
 main: top.timeblog.limitedGrace.LimitedGrace
-api-version: '1.21'
+api-version: '1.19'
 authors: [Time]
 description: Provides a limited death protection system where players keep their inventory for the first configurable number of deaths.
-website: https://www.time-blog.top
+website: https://github.com/User-Time/LimitedGrace
 
 commands:
   limitedgrace:
@@ -56,4 +56,4 @@ permissions:
 
   limitedgrace.unlimited:
     description: Bypass protection count consumption
-    default: op
+    default: false
