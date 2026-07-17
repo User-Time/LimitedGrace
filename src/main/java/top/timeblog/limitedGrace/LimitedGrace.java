@@ -54,7 +54,7 @@ public final class LimitedGrace extends JavaPlugin {
     public void loadConfigValues() {
         try {
             log.debug("Config Loading!");
-            ENABLED = getConfig().getBoolean("some-feature-enabled", true);
+            ENABLED = getConfig().getBoolean("enabled", true);
             CONFIG_DP_COUNT = getConfig().getInt("death-protections-number",10);
             CONFIG_AP_COUNT = getConfig().getInt("default-added-protections-number",0);
             CONFIG_PW_COUNT = getConfig().getIntegerList("protect-warn");

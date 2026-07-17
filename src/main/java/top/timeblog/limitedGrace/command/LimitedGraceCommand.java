@@ -207,8 +207,12 @@ public class LimitedGraceCommand implements CommandExecutor, TabCompleter {
                         return true;
                     }
                     Player player = Bukkit.getPlayer(args[1]);
-                    setSwitch(player, !getSwitch((Player)sender));
-                    sender.sendMessage(MessageFormat.format("已将 {0} 的保护状态切换为{1}",player.getName() , getSwitch((Player) sender)));
+                    if (player == null) {
+                        sender.sendMessage(CONFIG_P404_MSG);
+                        return true;
+                    }
+                    setSwitch(player, !getSwitch(player));
+                    sender.sendMessage(MessageFormat.format("已将 {0} 的保护状态切换为{1}",player.getName() , getSwitch(player)));
                 }
             }else if (args[0].equalsIgnoreCase("switchAll")){
                 if (!sender.hasPermission("limitedgrace.switch.all")){
