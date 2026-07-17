@@ -8,6 +8,7 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.NonNull;
 import top.timeblog.limitedGrace.LimitedGrace;
+import top.timeblog.limitedGrace.manager.ConfigManager;
 import top.timeblog.limitedGrace.manager.DeathManager;
 
 import java.text.MessageFormat;
@@ -15,31 +16,31 @@ import java.util.*;
 
 
 import static org.bukkit.Bukkit.getPlayer;
-import static top.timeblog.limitedGrace.LimitedGrace.*;
 import static top.timeblog.limitedGrace.manager.DeathManager.*;
 
 public class LimitedGraceCommand implements CommandExecutor, TabCompleter {
+    private final ConfigManager config = LimitedGrace.getInstance().getConfigManager();
 
     private String getDeathMessage(String name, Boolean protect) {
         Player player = getPlayer(name);
         if (player == null) {
-            return CONFIG_P404_MSG;
+            return config.getMessage("player-404-message");
         }
         int deathCounts = DeathManager.getDeaths(player);
         int AddedProtectionsNumber =  DeathManager.getAddedProtections(player);
 
         // 返回 保护次数
         if (protect){
-            int NewManProtections = Math.max(0, CONFIG_DP_COUNT - deathCounts);
+            int NewManProtections = Math.max(0, config.getProtectionCount() - deathCounts);
             return MessageFormat.format(
-                    CONFIG_P_MSG,
+                    config.getMessage("protect-message"),
                     name,AddedProtectionsNumber+NewManProtections, NewManProtections, AddedProtectionsNumber
             );
         }
 
         // 返回死亡次数
         return MessageFormat.format(
-                CONFIG_D_MSG,name,
+                config.getMessage("death-message"), name,
                 Integer.toString(deathCounts)
         );
 
@@ -50,31 +51,23 @@ public class LimitedGraceCommand implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NonNull CommandSender sender, @NonNull Command command, String label, String[] args) {
         if (args.length == 0 || args[0].equalsIgnoreCase("help")) {
-            sender.sendMessage("§6§lLimitedGrace 帮助");
-            sender.sendMessage("§e/lg help            §7- 查看插件帮助");
-            sender.sendMessage("§e/lg switch [玩家]          §7- 为自己/他人切换保护");
-            sender.sendMessage("§e/lg get [玩家]       §7- 查看 自己/其他玩家 的剩余保护次数");
-            sender.sendMessage("§e/lg getDeaths [玩家] §7- 查看 自己/其他玩家 死亡次数");
-            sender.sendMessage("§e/lg set [玩家] <次数> §7- 修改 自己/其他玩家 额外保护次数");
-            sender.sendMessage("§e/lg setDeaths [玩家] <次数> §7- 修改 自己/其他玩家 死亡次数");
-            sender.sendMessage("§e/lg add [玩家] <次数> §7- 添加 自己/其他玩家 的额外死亡保护");
-            sender.sendMessage("§e/lg reload           §7- 重载插件配置");
+            config.getMessageList("help-message").forEach(sender::sendMessage);
             return true;
         }
         else if (args.length > 0 ) {
             if (args[0].equalsIgnoreCase("reload")){
 
                 if (!sender.hasPermission("limitedgrace.reload")){
-                    sender.sendMessage(CONFIG_NP_MSG);
+                    sender.sendMessage(config.getMessage("not-permission-message"));
                     return true;
                 }
-                LimitedGrace.getInstance().loadConfigValues();
-                sender.sendMessage(CONFIG_RELOAD_MSG);
+                config.reload();
+                sender.sendMessage(config.getMessage("reload-message"));
             }
 
             else if (args[0].equalsIgnoreCase("getDeaths")) {
                 if (!sender.hasPermission("limitedgrace.get")){
-                    sender.sendMessage(CONFIG_NP_MSG);
+                    sender.sendMessage(config.getMessage("not-permission-message"));
                     return true;
                 }
 
@@ -85,7 +78,7 @@ public class LimitedGraceCommand implements CommandExecutor, TabCompleter {
                     sender.sendMessage(getDeathMessage(sender.getName(),false));
                 }else if (args.length == 2) {
                     if (!sender.hasPermission("limitedgrace.get.it")){
-                        sender.sendMessage(CONFIG_NP_MSG);
+                        sender.sendMessage(config.getMessage("not-permission-message"));
                         return true;
                     }
                     sender.sendMessage(getDeathMessage(args[1], false));
@@ -93,7 +86,7 @@ public class LimitedGraceCommand implements CommandExecutor, TabCompleter {
             }
             else if (args[0].equalsIgnoreCase("get")) {
                 if (!sender.hasPermission("limitedgrace.get")){
-                    sender.sendMessage(CONFIG_NP_MSG);
+                    sender.sendMessage(config.getMessage("not-permission-message"));
                     return true;
                 }
                 if (args.length == 1) {
@@ -103,7 +96,7 @@ public class LimitedGraceCommand implements CommandExecutor, TabCompleter {
                     sender.sendMessage(getDeathMessage(sender.getName(), true));
                 } else if (args.length == 2) {
                     if (!sender.hasPermission("limitedgrace.get.it")){
-                        sender.sendMessage(CONFIG_NP_MSG);
+                        sender.sendMessage(config.getMessage("not-permission-message"));
                         return true;
                     }
                     sender.sendMessage(getDeathMessage(args[1], true));
@@ -111,7 +104,7 @@ public class LimitedGraceCommand implements CommandExecutor, TabCompleter {
             }
             else if (args[0].equalsIgnoreCase("setDeath")) {
                 if (!sender.hasPermission("limitedgrace.setdeath")){
-                    sender.sendMessage(CONFIG_NP_MSG);
+                    sender.sendMessage(config.getMessage("not-permission-message"));
                     return true;
                 }
                 if (args.length == 2) {
@@ -119,7 +112,7 @@ public class LimitedGraceCommand implements CommandExecutor, TabCompleter {
                     try {
                         count = Integer.parseInt(args[1]);
                     }catch (Exception e){
-                        sender.sendMessage("%s is not a valid integer type.".formatted(args[1]));
+                        sender.sendMessage(MessageFormat.format(config.getMessage("integer-error-message"), args[1]));
                         return true;
                     }
                     sender.sendMessage(setDeathCounts(sender.getName(), count));
@@ -128,7 +121,7 @@ public class LimitedGraceCommand implements CommandExecutor, TabCompleter {
                     try {
                         count = Integer.parseInt(args[2]);
                     }catch (Exception e){
-                        sender.sendMessage("%s is not a valid integer type.".formatted(args[2]));
+                        sender.sendMessage(MessageFormat.format(config.getMessage("integer-error-message"), args[2]));
                         return true;
                     }
                     sender.sendMessage(setDeathCounts(args[1], count));
@@ -136,7 +129,7 @@ public class LimitedGraceCommand implements CommandExecutor, TabCompleter {
             }
             else if (args[0].equalsIgnoreCase("add")) {
                 if (!sender.hasPermission("limitedgrace.add")){
-                    sender.sendMessage(CONFIG_NP_MSG);
+                    sender.sendMessage(config.getMessage("not-permission-message"));
                     return true;
                 }
                 if (args.length == 2) {
@@ -145,7 +138,7 @@ public class LimitedGraceCommand implements CommandExecutor, TabCompleter {
                     try {
                         count = Integer.parseInt(args[1]);
                     }catch (Exception e){
-                        sender.sendMessage("%s is not a valid integer type.".formatted(args[1]));
+                        sender.sendMessage(MessageFormat.format(config.getMessage("integer-error-message"), args[1]));
                         return true;
                     }
 
@@ -156,7 +149,7 @@ public class LimitedGraceCommand implements CommandExecutor, TabCompleter {
                     try {
                         count = Integer.parseInt(args[2]);
                     }catch (Exception e){
-                        sender.sendMessage("%s is not a valid integer type.".formatted(args[2]));
+                        sender.sendMessage(MessageFormat.format(config.getMessage("integer-error-message"), args[2]));
                         return true;
                     }
                     sender.sendMessage(addAddedProtectionsNumber(getPlayer(args[1]), count));
@@ -164,7 +157,7 @@ public class LimitedGraceCommand implements CommandExecutor, TabCompleter {
             }
             else if (args[0].equalsIgnoreCase("set")) {
                 if (!sender.hasPermission("limitedgrace.set")){
-                    sender.sendMessage(CONFIG_NP_MSG);
+                    sender.sendMessage(config.getMessage("not-permission-message"));
                     return true;
                 }
                 if (args.length == 2) {
@@ -173,7 +166,7 @@ public class LimitedGraceCommand implements CommandExecutor, TabCompleter {
                     try {
                         count = Integer.parseInt(args[1]);
                     }catch (Exception e){
-                        sender.sendMessage("%s is not a valid integer type.".formatted(args[1]));
+                        sender.sendMessage(MessageFormat.format(config.getMessage("integer-error-message"), args[1]));
                         return true;
                     }
                     sender.sendMessage(setAddedProtectionsCounts(sender.getName(), count));
@@ -183,7 +176,7 @@ public class LimitedGraceCommand implements CommandExecutor, TabCompleter {
                     try {
                         count = Integer.parseInt(args[2]);
                     }catch (Exception e){
-                        sender.sendMessage("%s is not a valid integer type.".formatted(args[2]));
+                        sender.sendMessage(MessageFormat.format(config.getMessage("integer-error-message"), args[2]));
                         return true;
                     }
                     sender.sendMessage(setAddedProtectionsCounts(args[1], count));
@@ -192,7 +185,7 @@ public class LimitedGraceCommand implements CommandExecutor, TabCompleter {
             }
             else if (args[0].equalsIgnoreCase("switch")){
                 if (!sender.hasPermission("limitedgrace.switch")){
-                    sender.sendMessage(CONFIG_NP_MSG);
+                    sender.sendMessage(config.getMessage("not-permission-message"));
                     return true;
                 }
                 if (args.length == 1) {
@@ -200,28 +193,28 @@ public class LimitedGraceCommand implements CommandExecutor, TabCompleter {
                         return true;
                     }
                     setSwitch((Player)sender, !getSwitch((Player)sender));
-                    sender.sendMessage(MessageFormat.format("已将您的保护状态切换为{0}", getSwitch((Player) sender)));
+                    sender.sendMessage(MessageFormat.format(config.getMessage("switch-self-message"), getSwitch((Player) sender)));
                 } else if (args.length == 2) {
                     if (!sender.hasPermission("limitedgrace.switch.it")){
-                        sender.sendMessage(CONFIG_NP_MSG);
+                        sender.sendMessage(config.getMessage("not-permission-message"));
                         return true;
                     }
                     Player player = Bukkit.getPlayer(args[1]);
                     if (player == null) {
-                        sender.sendMessage(CONFIG_P404_MSG);
+                        sender.sendMessage(config.getMessage("player-404-message"));
                         return true;
                     }
                     setSwitch(player, !getSwitch(player));
-                    sender.sendMessage(MessageFormat.format("已将 {0} 的保护状态切换为{1}",player.getName() , getSwitch(player)));
+                    sender.sendMessage(MessageFormat.format(config.getMessage("switch-player-message"), player.getName(), getSwitch(player)));
                 }
             }else if (args[0].equalsIgnoreCase("switchAll")){
                 if (!sender.hasPermission("limitedgrace.switch.all")){
-                    sender.sendMessage(CONFIG_NP_MSG);
+                    sender.sendMessage(config.getMessage("not-permission-message"));
                     return true;
                 }
                 if (args.length == 1) {
                     setAllSwitch(!getAllSwitch());
-                    sender.sendMessage(MessageFormat.format("已将全局保护状态切换为{0}", getAllSwitch()));
+                    sender.sendMessage(MessageFormat.format(config.getMessage("switch-all-message"), getAllSwitch()));
                 }
             }
         }

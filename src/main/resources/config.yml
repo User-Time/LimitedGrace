@@ -11,7 +11,19 @@ protect-warn:
   - 3
   - 1
 
-# Message
+# Messages support Minecraft color codes using `§`.
+# Dynamic values use placeholders such as {0}, {1}, etc.
+help-message:
+  - "§6§lLimitedGrace 帮助"
+  - "§e/lg help            §7- 查看插件帮助"
+  - "§e/lg switch [玩家]          §7- 为自己/他人切换保护"
+  - "§e/lg get [玩家]       §7- 查看 自己/其他玩家 的剩余保护次数"
+  - "§e/lg getDeaths [玩家] §7- 查看 自己/其他玩家 死亡次数"
+  - "§e/lg set [玩家] <次数> §7- 修改 自己/其他玩家 额外保护次数"
+  - "§e/lg setDeaths [玩家] <次数> §7- 修改 自己/其他玩家 死亡次数"
+  - "§e/lg add [玩家] <次数> §7- 添加 自己/其他玩家 的额外死亡保护"
+  - "§e/lg reload           §7- 重载插件配置"
+
 protect-message: "§a玩家 §f{0} §a具有 §e{1}次 §a死亡保护§f,\n§a其中包含 §e{2}次 §a新人保护§f,§a以及 §e{3}次 §a的额外死亡保护§f."
 protect-warn-message: "§a你只剩 §e{0}次 §a死亡保护了§f, \n§a其中新人保护仅剩 §e{1}次§f, §a额外死亡保护仅剩 §e{2}次§f."
 death-message: "§a玩家 §f{0} §a已死亡：§e{1}次"
@@ -22,3 +34,10 @@ set-player-added-permission-message: "§a已将玩家§f %s §a的额外死亡�
 player-404-message: "§c玩家不存在或不在线"
 value-err-message: "§c数值不合法"
 set-added-protect-message: "§a已将玩家 §f{0} §a的额外死亡保护设为：§e{1}次"
+integer-error-message: "{0} is not a valid integer type."
+value-unchanged-message: "§c数值无变化"
+death-update-error-message: "§c player Death data update error！"
+protection-update-error-message: "§c player AddedProtections data update error！"
+switch-self-message: "已将您的保护状态切换为{0}"
+switch-player-message: "已将 {0} 的保护状态切换为{1}"
+switch-all-message: "已将全局保护状态切换为{0}"

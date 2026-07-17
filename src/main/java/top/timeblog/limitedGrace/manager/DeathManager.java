@@ -9,9 +9,11 @@ import top.timeblog.limitedGrace.LimitedGrace;
 
 import java.text.MessageFormat;
 
-import static top.timeblog.limitedGrace.LimitedGrace.*;
-
 public class DeathManager {
+    private static ConfigManager config() {
+        return LimitedGrace.getInstance().getConfigManager();
+    }
+
     /// ==============
     ///    共用函数
     /// ==============
@@ -29,19 +31,17 @@ public class DeathManager {
 
     public static Boolean getSwitch(Player player){
         PersistentDataContainer thePlayer = player.getPersistentDataContainer();
-        return thePlayer.getOrDefault(DEATH_BOOL_KEY, PersistentDataType.BOOLEAN, true);
+        return thePlayer.getOrDefault(LimitedGrace.DEATH_BOOL_KEY, PersistentDataType.BOOLEAN, true);
     }
     public static void setSwitch(Player player, boolean value){
         PersistentDataContainer thePlayer = player.getPersistentDataContainer();
-        thePlayer.set(DEATH_BOOL_KEY, PersistentDataType.BOOLEAN, value);
+        thePlayer.set(LimitedGrace.DEATH_BOOL_KEY, PersistentDataType.BOOLEAN, value);
     }
     public static boolean getAllSwitch(){
-        return ENABLED;
+        return config().isEnabled();
     }
     public static void  setAllSwitch(boolean value){
-        ENABLED = value;
-        LimitedGrace.getInstance().getConfig().set("enabled", value);
-        LimitedGrace.getInstance().saveConfig();
+        config().setEnabled(value);
     }
 
     /// ================
@@ -72,7 +72,11 @@ public class DeathManager {
     // 查询 次数
     public static int getAddedProtections(Player player) {
         PersistentDataContainer thePlayer = player.getPersistentDataContainer();
-        return thePlayer.getOrDefault(LimitedGrace.ADDED_PROTECTION_COUNT_KEY, PersistentDataType.INTEGER, CONFIG_AP_COUNT);
+        return thePlayer.getOrDefault(
+                LimitedGrace.ADDED_PROTECTION_COUNT_KEY,
+                PersistentDataType.INTEGER,
+                config().getDefaultAddedProtectionCount()
+        );
     }
 
     // 设置 次数
@@ -86,7 +90,7 @@ public class DeathManager {
     public static String addAddedProtectionsNumber(Player player, int number) {
         int oldValue = getAddedProtections(player);
         setAddedProtectionsNumber(player, oldValue + number);
-        return CONFIG_SPAP_MSG.formatted(player.getName(), oldValue+number);
+        return config().getMessage("set-player-added-permission-message").formatted(player.getName(), oldValue+number);
     }
 
     // 减少 次数
@@ -105,21 +109,21 @@ public class DeathManager {
 
         addDeath(player,1);
         int deathsCount = getDeaths(player);
-        int left = Math.max(0, CONFIG_DP_COUNT - deathsCount);
+        int left = Math.max(0, config().getProtectionCount() - deathsCount);
 
-        if (deathsCount <= CONFIG_DP_COUNT) {
+        if (deathsCount <= config().getProtectionCount()) {
             DeathItemNotLose(event);
             // 保护次数警告
-            if (CONFIG_PW_COUNT.contains(left + getAddedProtections(player))){
-                player.sendMessage(MessageFormat.format(CONFIG_PW_MSG, left+getAddedProtections(player), left, getAddedProtections(player)));
+            if (config().getProtectionWarnCounts().contains(left + getAddedProtections(player))){
+                player.sendMessage(MessageFormat.format(config().getMessage("protect-warn-message"), left+getAddedProtections(player), left, getAddedProtections(player)));
             }
         }else if (getAddedProtections(player) > 0) {
             // 根据 额外保护次数
             minusAddedProtectionsNumber(player, 1);
             DeathItemNotLose(event);
             // 保护次数警告
-            if (CONFIG_PW_COUNT.contains(left + getAddedProtections(player))){
-                player.sendMessage(MessageFormat.format(CONFIG_PW_MSG, left+getAddedProtections(player), left, getAddedProtections(player)));
+            if (config().getProtectionWarnCounts().contains(left + getAddedProtections(player))){
+                player.sendMessage(MessageFormat.format(config().getMessage("protect-warn-message"), left+getAddedProtections(player), left, getAddedProtections(player)));
             }
         }
     }
@@ -130,41 +134,43 @@ public class DeathManager {
 
     public static String setDeathCounts(String name, Integer count) {
         if (count < 0) {
-            return CONFIG_VE_MSG;
+            return config().getMessage("value-err-message");
         }
         Player player = Bukkit.getPlayer(name);
         if (player == null) {
-            return CONFIG_P404_MSG;
+            return config().getMessage("player-404-message");
         } else if (count == DeathManager.getDeaths(player)) {
             // 没区别
-            return "§c数值无变化";
+            return config().getMessage("value-unchanged-message");
         }
         boolean status = DeathManager.setDeath(player, count);
         if (status) {
-            return CONFIG_SPD_MSG.formatted(name, count);
+            return config().getMessage("set-player-death-message").formatted(name, count);
         }
-        Log.warn("§c player Death data update error！");
-        return "§c player Death data update error！";
+        String errorMessage = config().getMessage("death-update-error-message");
+        LimitedGrace.getInstance().getComponentLogger().warn(errorMessage);
+        return errorMessage;
 
     }
     public static String setAddedProtectionsCounts(String name, Integer count) {
         if (count < 0) {
-            return CONFIG_VE_MSG;
+            return config().getMessage("value-err-message");
         }
         // 获取玩家对象
         Player player = Bukkit.getPlayer(name);
         if (player == null) {
             // 找不到对象
-            return CONFIG_P404_MSG;
+            return config().getMessage("player-404-message");
         } else if (count == DeathManager.getAddedProtections(player)) {
             // 没区别
-            return "§c数值无变化";
+            return config().getMessage("value-unchanged-message");
         }
         boolean status = DeathManager.setAddedProtectionsNumber(player, count);
         if (status) {
-            return CONFIG_SPAP_MSG.formatted(name, count);
+            return config().getMessage("set-player-added-permission-message").formatted(name, count);
         }
-        Log.warn("§c player AddedProtections data update error！");
-        return "§c player AddedProtections data update error！";
+        String errorMessage = config().getMessage("protection-update-error-message");
+        LimitedGrace.getInstance().getComponentLogger().warn(errorMessage);
+        return errorMessage;
     }
 }
