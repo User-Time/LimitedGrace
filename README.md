@@ -3,16 +3,16 @@
 ![Minecraft](https://img.shields.io/badge/Minecraft-1.19.4%2B-brightgreen)
 ![Platform](https://img.shields.io/badge/Platform-Paper-orange)
 ![Java](https://img.shields.io/badge/Java-17%2B-blue)
-![Version](https://img.shields.io/badge/Version-1.3.0-blueviolet)
+![Version](https://img.shields.io/badge/Version-1.4.0-blueviolet)
 ![License](https://img.shields.io/github/license/User-Time/LimitedGrace)
 ![Release](https://img.shields.io/github/v/release/User-Time/LimitedGrace)
 ![Downloads](https://img.shields.io/github/downloads/User-Time/LimitedGrace/total)
 
-A lightweight Minecraft plugin that provides configurable and flexible **death protection** for players. ✨
+A lightweight Minecraft plugin providing configurable and flexible **death protection** for players. ✨
 
 LimitedGrace allows players to keep their inventory and experience for a limited number of deaths. It is suitable for survival servers that want to reduce early-game frustration while preserving the long-term challenge of survival gameplay.
 
-Version **1.3.0** adds an asynchronous GitHub Releases update checker, lowers the minimum requirements to Paper 1.19.4 and Java 17, improves configuration management, and fixes configuration and player protection toggle issues.
+Version **1.4.0** adds configurable handling for worlds where the `keepInventory` game rule is enabled. By default, deaths in these worlds no longer consume LimitedGrace protection charges, while server administrators can restore charge consumption through `config.yml`.
 
 ---
 
@@ -42,6 +42,9 @@ Version **1.3.0** adds an asynchronous GitHub Releases update checker, lowers th
 * **Unlimited Protection Permission**
   Players with `limitedgrace.unlimited` can use death protection without consuming their available protection charges.
 
+* **keepInventory-Aware Charge Handling**
+  Prevents LimitedGrace protection charges from being consumed unnecessarily when the world's `keepInventory` game rule already preserves player inventories. This behavior can be changed in `config.yml`.
+
 * **Smart Warnings**
   Players receive automatic notifications when their remaining protection charges are running low.
 
@@ -53,10 +56,10 @@ Version **1.3.0** adds an asynchronous GitHub Releases update checker, lowers th
 
 * **Configurable Messages**
   Protection limits, warning thresholds, and plugin messages can be customized through `config.yml`.
-  
+
 * **GitHub Release Update Checker**
   Asynchronously checks GitHub Releases for new versions when the server starts. Update checking can be disabled in `config.yml`.
-  
+
 * **Java 17 Compatibility**
   Supports Java 17 and Paper 1.19.4 or newer.
 
@@ -118,6 +121,9 @@ enabled: true
 # Check GitHub Releases for a newer plugin version on startup.
 update-check:
   enabled: true
+
+# Whether deaths with the `keepInventory` game rule enabled consume a protection charge.
+keep-inventory-consumes-charge: false
 
 # Number of protection charges.
 death-protections-number: 10
@@ -187,6 +193,8 @@ When a protected player dies:
 * Experience is not lost.
 * One applicable protection charge is consumed.
 
+When the world's `keepInventory` game rule is enabled, LimitedGrace does not consume a protection charge by default because the game already preserves the player's inventory. Set `keep-inventory-consumes-charge` to `true` if these deaths should still consume charges.
+
 Protection is not applied when:
 
 * The player has disabled personal death protection.
@@ -226,5 +234,5 @@ Once all available protection has been exhausted, the player will die normally u
 Current version:
 
 ```text
-1.3.0
+1.4.0
 ```

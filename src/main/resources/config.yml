@@ -15,6 +15,9 @@ protect-warn:
   - 3
   - 1
 
+# Whether deaths with the `keepInventory` game rule enabled consume a protection charge.
+keepinventory-consumes-charge: false
+
 # Messages support Minecraft color codes using `§`.
 # Dynamic values use placeholders such as {0}, {1}, etc.
 help-message:

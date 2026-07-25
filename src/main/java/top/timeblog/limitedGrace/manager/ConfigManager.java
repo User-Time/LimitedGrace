@@ -27,6 +27,10 @@ public final class ConfigManager {
         return config.getBoolean("enabled", true);
     }
 
+    public boolean keepInventoryConsumesCharge() {
+        return config.getBoolean("keepinventory-consumes-charge", false);
+    }
+
     public boolean isUpdateCheckEnabled() {
         return config.getBoolean("update-check.enabled", true);
     }

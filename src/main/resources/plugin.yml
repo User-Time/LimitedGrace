@@ -1,5 +1,5 @@
 name: LimitedGrace
-version: '1.3.0'
+version: '1.4.0'
 main: top.timeblog.limitedGrace.LimitedGrace
 api-version: '1.19'
 authors: [Time]
