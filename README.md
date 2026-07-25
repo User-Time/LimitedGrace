@@ -123,7 +123,7 @@ update-check:
   enabled: true
 
 # Whether deaths with the `keepInventory` game rule enabled consume a protection charge.
-keep-inventory-consumes-charge: false
+keepinventory-consumes-charge: false
 
 # Number of protection charges.
 death-protections-number: 10
